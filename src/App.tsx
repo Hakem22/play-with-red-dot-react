@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { KeyboardKey } from "./keyboardKey";
+import { RedDot } from "./redDot";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const Dot = () => {
+    return <span className="dot"></span>
 }
 
-export default App;
+class App extends React.Component {
+    dot = { x: false, y: false } as RedDot
+    
+    handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+        if (event.key === KeyboardKey.UP) this.dot.y = false;
+        else if (event.key === KeyboardKey.DOWN) this.dot.y = true;
+        else if (event.key === KeyboardKey.LEFT) this.dot.x = false;
+        else if (event.key === KeyboardKey.RIGHT) this.dot.x = true;
+
+        this.setState(this.dot);
+    };
+  render() {
+       
+      return (
+          <div tabIndex={0} onKeyDown={this.handleKeyDown} className="App">
+              <div  className="content">
+                  <h1>Use arrow keys to move the dot</h1>
+                  <table>
+                      <tr>
+                          <td>{ !this.dot.x && !this.dot.y && <Dot/> }</td>
+                          <td>{ this.dot.x && !this.dot.y && <Dot/> }</td>
+                      </tr>
+                      <tr>
+                          <td>{ !this.dot.x && this.dot.y && <Dot/> }</td>
+                          <td>{ this.dot.x && this.dot.y && <Dot/> }</td>
+                      </tr>
+                  </table>
+              </div>
+      </div>)
+  };
+}
+
+export default App
